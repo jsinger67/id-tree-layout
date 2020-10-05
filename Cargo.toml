@@ -1,0 +1,11 @@
+[package]
+name = "id-tree-layout"
+version = "0.1.0"
+authors = ["Jörg Singer <singer.joerg@gmx.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+id_tree = "1.7.0"
+xml_writer = "0.4.0"
