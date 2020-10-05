@@ -60,8 +60,8 @@ impl Drawer for SvgDrawer {
             }
         });
 
+        let img_width = Self::scale_x(tree_width);
         let img_height = Self::scale_y(tree_depth + 1);
-        let img_width = Self::scale_y(tree_width);
 
         xml.attr("width", format!("{}", img_width).as_str())?;
         xml.attr("height", format!("{}", img_height).as_str())?;
