@@ -1,4 +1,3 @@
-extern crate xml_writer;
 use xml_writer::XmlWriter;
 
 use std::fs::File;
@@ -83,8 +82,8 @@ impl SvgDrawer {
             xml.text(data.name.as_str())?;
             xml.end_elem()?;
 
-            if let Some(parent_index) = data.parent_index {
-                let parent_data = &embedding[parent_index];
+            if let Some(parent_index) = data.parent {
+                let parent_data = embedding.iter().find(|e| e.id == parent_index).unwrap();
 
                 // Draw a line from the nodes parent down to this node
                 xml.begin_elem("line")?;

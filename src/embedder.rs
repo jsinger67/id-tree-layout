@@ -1,6 +1,6 @@
-use std::collections::hash_map::DefaultHasher;
 use crate::visualize::Visualize;
 use id_tree::{NodeId, Tree};
+use std::collections::hash_map::DefaultHasher;
 use std::collections::{BTreeMap, BTreeSet};
 use std::hash::{Hash, Hasher};
 
@@ -51,7 +51,7 @@ where
         Self::transfer_result(items)
     }
 
-    fn create_initial_embedding_data<'a>(tree: &'a Tree<T>) -> EmbeddingHelperMap {
+    fn create_initial_embedding_data(tree: &Tree<T>) -> EmbeddingHelperMap {
         fn create_from_node<T: Visualize>(
             node_id: &NodeId,
             tree: &Tree<T>,
@@ -78,7 +78,7 @@ where
                 name,
                 is_empasized: node.data().emphasize(),
                 id,
-                parent
+                parent,
             }
         }
 
