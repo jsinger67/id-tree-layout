@@ -1,8 +1,6 @@
 use id_tree::InsertBehavior::{AsRoot, UnderNode};
-use id_tree::*;
-use id_tree_layout::Layouter;
-use id_tree_layout::SvgDrawer;
-use id_tree_layout::Visualize;
+use id_tree::{Node, NodeId, Tree, TreeBuilder};
+use id_tree_layout::{Layouter, SvgDrawer, Visualize};
 
 struct MyNodeData(i32);
 
