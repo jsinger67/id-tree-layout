@@ -1,5 +1,5 @@
 [package]
-name = "id-tree-layout"
+name = "id_tree_layout"
 version = "0.1.0"
 authors = ["Jörg Singer <singer.joerg@gmx.de>"]
 edition = "2018"

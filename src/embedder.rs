@@ -36,11 +36,13 @@ where
 {
     pub fn embed(tree: &Tree<T>) -> Embedding {
         // Insert all tree items with their indices
-        // After this step each item has following properties set: 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent'
+        // After this step each item has following properties set:
+        // 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent'
         let mut items = Self::create_initial_embedding_data(tree);
 
         // Set depth (y_order) on each PlacedTreeItem structure
-        // After this step each item has following properties set: 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent', 'parent_index', 'y_order'
+        // After this step each item has following properties set:
+        // 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent', 'y_order'
         Self::apply_y_order(tree, &mut items);
 
         // Finally set the property 'x_center' from leafs to root
@@ -85,7 +87,7 @@ where
         let mut items = EmbeddingHelperMap::new();
 
         for node_id in tree
-            .traverse_pre_order_ids(tree.root_node_id().unwrap())
+            .traverse_post_order_ids(tree.root_node_id().unwrap())
             .unwrap()
         {
             let new_item = create_from_node(&node_id, tree, &items);

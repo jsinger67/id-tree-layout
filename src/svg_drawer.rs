@@ -1,3 +1,5 @@
+use crate::Drawer;
+use std::path::Path;
 use xml_writer::XmlWriter;
 
 use std::fs::File;
@@ -12,9 +14,14 @@ const Y_FACTOR: f32 = 3.5;
 const FONT_X_SIZE: f32 = 10.0;
 const FONT_Y_SIZE: f32 = 10.0;
 
+#[derive(Debug, Default)]
 pub struct SvgDrawer;
 
 impl SvgDrawer {
+    pub fn new() -> Self {
+        Self
+    }
+
     fn scale_y(y: usize) -> f32 {
         y as f32 * FONT_Y_SIZE * Y_FACTOR + Y_MARGIN
     }
@@ -26,8 +33,10 @@ impl SvgDrawer {
     fn measure_string(str: &str) -> f32 {
         str.len() as f32 * FONT_X_SIZE
     }
+}
 
-    pub fn draw_parse_tree(file_name: &str, embedding: &[PlacedTreeItem]) -> Result {
+impl Drawer for SvgDrawer {
+    fn draw(&self, file_name: &Path, embedding: &[PlacedTreeItem]) -> Result {
         let file = File::create(file_name)?;
         let mut xml = XmlWriter::new(file);
 
