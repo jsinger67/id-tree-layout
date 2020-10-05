@@ -9,7 +9,11 @@ pub struct LayouterError {
 
 impl fmt::Display for LayouterError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.description)
+        if let Some(err) = &self.io_error {
+            write!(f, "{}", err)
+        } else {
+            write!(f, "{}", self.description)
+        }
     }
 }
 

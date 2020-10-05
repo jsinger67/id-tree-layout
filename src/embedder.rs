@@ -61,24 +61,29 @@ where
         ) -> PlacedTreeItem {
             let node = tree.get(node_id).unwrap();
             let name = node.data().visualize();
-            let xe = name.len() + 1;
-            let xec = node.children().iter().fold(0, |acc, child_node_id| {
+            let y_order = 0;
+            let x_center = 0;
+            let x_extend = name.len() + 1;
+            let x_extend_of_children = node.children().iter().fold(0, |acc, child_node_id| {
                 if let Some(placed_item) = items.get(child_node_id) {
                     acc + placed_item.x_extend_children
                 } else {
                     panic!("Child node should already exist!");
                 }
             });
+            let x_extend_children = std::cmp::max(x_extend, x_extend_of_children);
+            let is_empasized = node.data().emphasize();
             let id = Embedder::<T>::get_node_id_hash(node_id);
             let parent = node.parent().map(|p| Embedder::<T>::get_node_id_hash(p));
+
             PlacedTreeItem {
-                y_order: 0,
-                x_center: 0,
-                x_extend: xe,
-                x_extend_of_children: xec,
-                x_extend_children: std::cmp::max(xe, xec),
+                y_order,
+                x_center,
+                x_extend,
+                x_extend_of_children,
+                x_extend_children,
                 name,
-                is_empasized: node.data().emphasize(),
+                is_empasized,
                 id,
                 parent,
             }
@@ -144,9 +149,9 @@ where
                         }
                     } else {
                         // None means we are in layer 0
-                        assert_eq!(layer, 0);
+                        debug_assert_eq!(layer, 0);
                         // and we should have only one root
-                        assert_eq!(node_ids_in_layer.len(), 1);
+                        debug_assert_eq!(node_ids_in_layer.len(), 1);
                         // We start all the way left
                         0
                     }
