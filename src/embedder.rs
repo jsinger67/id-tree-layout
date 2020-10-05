@@ -1,6 +1,8 @@
+use std::collections::hash_map::DefaultHasher;
 use crate::visualize::Visualize;
 use id_tree::{NodeId, Tree};
 use std::collections::{BTreeMap, BTreeSet};
+use std::hash::{Hash, Hasher};
 
 pub type Embedding = Vec<PlacedTreeItem>;
 
@@ -13,6 +15,8 @@ pub struct PlacedTreeItem {
     pub x_extend_children: usize,
     pub name: String,
     pub is_empasized: bool,
+    pub id: u64,
+    pub parent: Option<u64>,
 }
 
 impl PlacedTreeItem {}
@@ -32,11 +36,11 @@ where
 {
     pub fn embed(tree: &Tree<T>) -> Embedding {
         // Insert all tree items with their indices
-        // After this step each item has following properties set: 'x_extend', 'name', 'is_empasized', 'x_extend_children'
+        // After this step each item has following properties set: 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent'
         let mut items = Self::create_initial_embedding_data(tree);
 
         // Set depth (y_order) on each PlacedTreeItem structure
-        // After this step each item has following properties set: 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'parent_index', 'y_order'
+        // After this step each item has following properties set: 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent', 'parent_index', 'y_order'
         Self::apply_y_order(tree, &mut items);
 
         // Finally set the property 'x_center' from leafs to root
@@ -63,6 +67,8 @@ where
                     panic!("Child node should already exist!");
                 }
             });
+            let id = Embedder::<T>::get_node_id_hash(node_id);
+            let parent = node.parent().map(|p| Embedder::<T>::get_node_id_hash(p));
             PlacedTreeItem {
                 y_order: 0,
                 x_center: 0,
@@ -71,6 +77,8 @@ where
                 x_extend_children: std::cmp::max(xe, xec),
                 name,
                 is_empasized: node.data().emphasize(),
+                id,
+                parent
             }
         }
 
@@ -153,6 +161,12 @@ where
         for l in 0..tree.height() + 1 {
             x_center_layer(l, tree, items);
         }
+    }
+
+    fn get_node_id_hash(node_id: &NodeId) -> u64 {
+        let mut hasher = DefaultHasher::new();
+        node_id.clone().hash(&mut hasher);
+        hasher.finish()
     }
 
     fn transfer_result(items: EmbeddingHelperMap) -> Embedding {
