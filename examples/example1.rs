@@ -35,6 +35,6 @@ fn main() {
     let drawer = SvgDrawer::new();
     let layouter = Layouter::with_tree(&tree)
         .with_drawer(&drawer)
-        .with_file_name(std::path::Path::new("example1.svg"));
+        .with_file_name(std::path::Path::new("examples/example1.svg"));
     layouter.write().expect("Failed writing layout")
 }

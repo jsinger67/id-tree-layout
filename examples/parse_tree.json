@@ -1,0 +1,963 @@
+{
+    "id": {
+        "prefix": 0,
+        "offset": 0
+    },
+    "root": {
+        "tree_id": {
+            "prefix": 0,
+            "offset": 0
+        },
+        "index": 0
+    },
+    "nodes": [
+        {
+            "data": {
+                "name": "calc",
+                "is_terminal": false
+            },
+            "parent": null,
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 1
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "calc_lst1",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 0
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 2
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "calc_lst1_itm1",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 1
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 3
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 4
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "instruction",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 2
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 5
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": ";",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 2
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "assignment",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 3
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 6
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 11
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "assign_item",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 5
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 7
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 9
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "id",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 6
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 8
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "c",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 7
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "assign_op",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 6
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 10
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "=",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 9
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "locigal_or",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 5
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 12
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "locigal_and",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 11
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 13
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "bitwise_or",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 12
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 14
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "bitwise_and",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 13
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 15
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "equality",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 14
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 16
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "relational",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 15
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 17
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "bitwise_shift",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 16
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 18
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "sum",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 17
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 19
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 33
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "mult",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 18
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 20
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 24
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "power",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 19
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 21
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "factor",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 20
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 22
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "number",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 21
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 23
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "2",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 22
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "mult_lst1",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 19
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 25
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "mult_lst1_itm1",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 24
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 26
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "mult_item",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 25
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 27
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 29
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "mult_op",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 26
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 28
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "*",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 27
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "power",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 26
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 30
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "factor",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 29
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 31
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "number",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 30
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 32
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "4",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 31
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "sum_lst1",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 18
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 34
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "sum_lst1_itm1",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 33
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 35
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "sum_item",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 34
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 36
+                },
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 39
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "add_op",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 35
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 37
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "plus",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 36
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 38
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "+",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 37
+            },
+            "children": []
+        },
+        {
+            "data": {
+                "name": "mult",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 35
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 40
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "power",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 39
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 41
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "factor",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 40
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 42
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "number",
+                "is_terminal": false
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 41
+            },
+            "children": [
+                {
+                    "tree_id": {
+                        "prefix": 0,
+                        "offset": 0
+                    },
+                    "index": 43
+                }
+            ]
+        },
+        {
+            "data": {
+                "name": "5",
+                "is_terminal": true
+            },
+            "parent": {
+                "tree_id": {
+                    "prefix": 0,
+                    "offset": 0
+                },
+                "index": 42
+            },
+            "children": []
+        }
+    ],
+    "free_ids": []
+}

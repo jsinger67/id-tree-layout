@@ -7,5 +7,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-id_tree = "1.7.0"
+id_tree = { version = "1.7.0", features = ["serde_support"]}
 xml_writer = "0.4.0"
+serde = "1.0.115"
+serde_derive = "1.0.115"
+serde_json = "1.0.57"
