@@ -7,22 +7,20 @@ use id_tree::Tree;
 
 pub type Result = layouter_error::Result<()>;
 
-pub struct Layouter<'a, 'b, 'c, T, D>
-where
-    T: Visualize,
-    D: Drawer + Sized,
-    Self: Sized,
-{
-    tree: &'a Tree<T>,
-    drawer: Option<&'c D>,
-    file_name: Option<&'b std::path::Path>,
-}
-
-impl<'a, 'b, 'c, T, D> Layouter<'a, 'b, 'c, T, D>
+pub struct Layouter<'a, 'c, 'b, T, D>
 where
     T: Visualize,
     D: Drawer,
-    Self: Sized,
+{
+    tree: &'a Tree<T>,
+    drawer: Option<&'b D>,
+    file_name: Option<&'c std::path::Path>,
+}
+
+impl<'a, 'c, 'b, T, D> Layouter<'a, 'c, 'b, T, D>
+where
+    T: Visualize,
+    D: Drawer,
 {
     pub fn with_tree(tree: &'a Tree<T>) -> Self {
         Self {
@@ -32,12 +30,12 @@ where
         }
     }
 
-    pub fn with_file_name(mut self, path: &'b std::path::Path) -> Self {
+    pub fn with_file_name(mut self, path: &'c std::path::Path) -> Self {
         self.file_name = Some(path);
         self
     }
 
-    pub fn with_drawer(mut self, drawer: &'c D) -> Self {
+    pub fn with_drawer(mut self, drawer: &'b D) -> Self {
         self.drawer = Some(drawer);
         self
     }

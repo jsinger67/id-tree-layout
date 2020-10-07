@@ -96,7 +96,7 @@ where
             .unwrap()
         {
             let new_item = create_from_node(&node_id, tree, &items);
-            let _ = items.insert(node_id.clone(), new_item);
+            let _ = items.insert(node_id, new_item);
         }
 
         items
