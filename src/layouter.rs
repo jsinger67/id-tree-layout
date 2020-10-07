@@ -52,11 +52,9 @@ where
         } else {
             let embedding = Embedder::embed(self.tree);
             let drawer = self.drawer.unwrap() as &dyn Drawer;
-            let result = drawer.draw(self.file_name.unwrap(), &embedding);
-            match result {
-                Err(err) => Err(LayouterError::from_ioerror(err)),
-                Ok(()) => Ok(()),
-            }
+            drawer
+                .draw(self.file_name.unwrap(), &embedding)
+                .map_err(|e| LayouterError::from_ioerror(e))
         }
     }
 }
