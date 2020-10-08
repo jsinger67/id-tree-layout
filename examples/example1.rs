@@ -1,14 +1,19 @@
 use id_tree::InsertBehavior::{AsRoot, UnderNode};
 use id_tree::{Node, NodeId, Tree, TreeBuilder};
-use id_tree_layout::{Layouter, SvgDrawer, Visualize};
+use id_tree_layout::{Layouter, Visualize};
 
 struct MyNodeData(i32);
 
+// You need to implement id_tree_layout::Visualize for your nodes data type.
+// This way you provide basic stringify and formatting information.
 impl Visualize for MyNodeData {
     fn visualize(&self) -> std::string::String {
+        // We simply covert the i32 value to string here.
         self.0.to_string()
     }
     fn emphasize(&self) -> bool {
+        // This simply emphasizes only to leaf nodes.
+        // It only works for this example.
         self.0 > 1
     }
 }
@@ -32,9 +37,7 @@ fn main() {
     tree.insert(Node::new(MyNodeData(4)), UnderNode(&child_id))
         .unwrap();
 
-    let drawer = SvgDrawer::new();
-    let layouter = Layouter::with_tree(&tree)
-        .with_drawer(&drawer)
-        .with_file_name(std::path::Path::new("examples/example1.svg"));
+    let layouter =
+        Layouter::new(&tree).with_file_name(std::path::Path::new("examples/example1.svg"));
     layouter.write().expect("Failed writing layout")
 }

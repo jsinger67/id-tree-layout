@@ -1,11 +1,23 @@
+//! This is the actual embedding module.
+//! It embeds the nodes of a tree into the plane.
+//! The Embedder type therefore provides a single public function `embed`.
+
 use crate::visualize::Visualize;
 use id_tree::{NodeId, Tree};
 use std::collections::hash_map::DefaultHasher;
 use std::collections::{BTreeMap, BTreeSet};
 use std::hash::{Hash, Hasher};
 
+///
+/// The Embedding is the interface to drawers that need the embedding
+/// to tranform it to their own format.
+/// 
 pub type Embedding = Vec<PlacedTreeItem>;
 
+///
+/// The PlacedTreeItem is the embedding information for one single tree node.
+/// It is used only in a collection type [Embedding].
+/// 
 #[derive(Debug, Clone, Default)]
 pub struct PlacedTreeItem {
     pub y_order: usize,
@@ -18,8 +30,6 @@ pub struct PlacedTreeItem {
     pub id: u64,
     pub parent: Option<u64>,
 }
-
-impl PlacedTreeItem {}
 
 type EmbeddingHelperMap = BTreeMap<NodeId, PlacedTreeItem>;
 
@@ -34,6 +44,9 @@ impl<T> Embedder<T>
 where
     T: Visualize,
 {
+    ///
+    /// This function creates an emebdding of the nodes of the given tree in the plane.
+    /// 
     pub fn embed(tree: &Tree<T>) -> Embedding {
         // Insert all tree items with their indices
         // After this step each item has following properties set:
@@ -91,25 +104,29 @@ where
 
         let mut items = EmbeddingHelperMap::new();
 
-        for node_id in tree
-            .traverse_post_order_ids(tree.root_node_id().unwrap())
+        tree.root_node_id().map(|root_node_id| {
+            for node_id in tree
+            .traverse_post_order_ids(root_node_id)
             .unwrap()
-        {
-            let new_item = create_from_node(&node_id, tree, &items);
-            let _ = items.insert(node_id, new_item);
-        }
+            {
+                let new_item = create_from_node(&node_id, tree, &items);
+                let _ = items.insert(node_id, new_item);
+            }
+        });
 
         items
     }
 
     fn apply_y_order<'a>(tree: &Tree<T>, items: &'a mut EmbeddingHelperMap) {
-        for node_id in tree
-            .traverse_pre_order_ids(tree.root_node_id().unwrap())
-            .unwrap()
-        {
-            let item = items.get_mut(&node_id).unwrap();
-            item.y_order = tree.ancestor_ids(&node_id).unwrap().count();
-        }
+        tree.root_node_id().map(|root_node_id| {
+            for node_id in tree
+                .traverse_pre_order_ids(root_node_id)
+                .unwrap()
+            {
+                let item = items.get_mut(&node_id).unwrap();
+                item.y_order = tree.ancestor_ids(&node_id).unwrap().count();
+            }
+        });
     }
 
     fn apply_x_center(tree: &Tree<T>, items: &mut EmbeddingHelperMap) {

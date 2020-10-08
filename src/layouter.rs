@@ -1,28 +1,45 @@
 use crate::layouter_error;
-use crate::layouter_error::LayouterError;
-use crate::Drawer;
-use crate::Embedder;
-use crate::Visualize;
+use crate::{Drawer, Embedder, LayouterError, SvgDrawer, Visualize};
 use id_tree::Tree;
 
 pub type Result = layouter_error::Result<()>;
 
-pub struct Layouter<'a, 'c, 'b, T, D>
+///
+/// The Layouter type provides a simple builder mechanism with a fluent API.
+///
+pub struct Layouter<'a, 'b, 'c, T>
 where
     T: Visualize,
-    D: Drawer,
 {
     tree: &'a Tree<T>,
-    drawer: Option<&'b D>,
+    drawer: Option<&'b dyn Drawer>,
     file_name: Option<&'c std::path::Path>,
 }
 
-impl<'a, 'c, 'b, T, D> Layouter<'a, 'c, 'b, T, D>
+impl<'a, 'b, 'c, T> Layouter<'a, 'b, 'c, T>
 where
     T: Visualize,
-    D: Drawer,
 {
-    pub fn with_tree(tree: &'a Tree<T>) -> Self {
+    ///
+    /// Creates a new Layouter with the required tree.
+    ///
+    /// ```
+    /// use id_tree_layout::{Layouter, Visualize};
+    /// use id_tree::{Tree, TreeBuilder};
+    ///
+    /// struct MyNodeData(i32);
+    ///
+    /// impl Visualize for MyNodeData {
+    ///     fn visualize(&self) -> std::string::String { self.0.to_string() }
+    ///     fn emphasize(&self) -> bool { false }
+    /// }
+    ///
+    ///
+    /// let tree: Tree<MyNodeData> = TreeBuilder::new().build();
+    /// let layouter = Layouter::new(&tree);
+    /// ```
+    ///
+    pub fn new(tree: &'a Tree<T>) -> Self {
         Self {
             tree,
             drawer: None,
@@ -30,31 +47,110 @@ where
         }
     }
 
-    pub fn with_file_name(mut self, path: &'c std::path::Path) -> Self {
-        self.file_name = Some(path);
-        self
+    ///
+    /// Sets the name of the output file on the layouter.
+    ///
+    /// ```
+    /// use id_tree_layout::{Layouter, Visualize};
+    /// use id_tree::{Tree, TreeBuilder};
+    /// use std::path::Path;
+    ///
+    /// struct MyNodeData(i32);
+    ///
+    /// impl Visualize for MyNodeData {
+    ///     fn visualize(&self) -> std::string::String { self.0.to_string() }
+    ///     fn emphasize(&self) -> bool { false }
+    /// }
+    ///
+    ///
+    /// let tree: Tree<MyNodeData> = TreeBuilder::new().build();
+    /// let layouter = Layouter::new(&tree)
+    ///     .with_file_name(Path::new("test.svg"));
+    /// ```
+    ///
+    pub fn with_file_name(self, path: &'c std::path::Path) -> Self {
+        Self {
+            tree: self.tree,
+            file_name: Some(path),
+            drawer: self.drawer,
+        }
     }
 
-    pub fn with_drawer(mut self, drawer: &'b D) -> Self {
-        self.drawer = Some(drawer);
-        self
+    ///
+    /// Sets a different drawer when you don't want to use the default svg-drawer.
+    /// If this method is not called the crates own svg-drawer is used.
+    ///
+    /// ```
+    /// use id_tree_layout::{Drawer, Layouter, PlacedTreeItem, Visualize};
+    /// use id_tree_layout::drawer::Result;
+    /// use id_tree::{Tree, TreeBuilder};
+    /// use std::path::Path;
+    ///
+    /// struct NilDrawer;
+    /// impl Drawer for NilDrawer {
+    ///     fn draw(&self, _file_name: &Path, _embedding: &[PlacedTreeItem]) -> Result {
+    ///         Ok(())
+    ///     }
+    /// }
+    ///
+    /// struct MyNodeData(i32);
+    ///
+    /// impl Visualize for MyNodeData {
+    ///     fn visualize(&self) -> std::string::String { self.0.to_string() }
+    ///     fn emphasize(&self) -> bool { false }
+    /// }
+    ///
+    ///
+    /// let tree: Tree<MyNodeData> = TreeBuilder::new().build();
+    /// let drawer = NilDrawer;
+    /// let layouter = Layouter::new(&tree)
+    ///     .with_drawer(&drawer)
+    ///     .with_file_name(Path::new("test.svg"));
+    /// ```
+    ///
+    pub fn with_drawer(self, drawer: &'b dyn Drawer) -> Self {
+        Self {
+            tree: self.tree,
+            file_name: self.file_name,
+            drawer: Some(drawer),
+        }
     }
 
+    ///
+    /// When fully configured this function invokes the necessary embedding function
+    /// and uses the drawer which writes the result to the output file in its own format.
+    /// 
+    /// ```
+    /// use id_tree_layout::{Layouter, Visualize};
+    /// use id_tree::{Tree, TreeBuilder};
+    /// use std::path::Path;
+    ///
+    /// struct MyNodeData(i32);
+    ///
+    /// impl Visualize for MyNodeData {
+    ///     fn visualize(&self) -> std::string::String { self.0.to_string() }
+    ///     fn emphasize(&self) -> bool { false }
+    /// }
+    ///
+    ///
+    /// let tree: Tree<MyNodeData> = TreeBuilder::new().build();
+    /// Layouter::new(&tree)
+    ///     .with_file_name(Path::new("test.svg"))
+    ///     .write().expect("Failed writing layout")
+    /// ```
+    ///
     pub fn write(&self) -> Result {
-        if self.drawer.is_none() {
-            Err(LayouterError::from_description(
-                "No drawer set - use Layouter::with_drawer.".to_string(),
-            ))
-        } else if self.file_name.is_none() {
+        if self.file_name.is_none() {
             Err(LayouterError::from_description(
                 "No output file name given - use Layouter::with_file_name.".to_string(),
             ))
         } else {
             let embedding = Embedder::embed(self.tree);
-            let drawer = self.drawer.unwrap() as &dyn Drawer;
+            let default_drawer = SvgDrawer::new();
+            let drawer = self.drawer.unwrap_or(&default_drawer);
             drawer
                 .draw(self.file_name.unwrap(), &embedding)
-                .map_err(|e| LayouterError::from_ioerror(e))
+                .map_err(LayouterError::from_ioerror)
         }
     }
 }

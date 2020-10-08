@@ -1,3 +1,6 @@
+//! The SvgDrawer type provides the tranformation of the embedding information
+//! into the Svg format.
+
 use crate::Drawer;
 use std::path::Path;
 use xml_writer::XmlWriter;

@@ -26,11 +26,11 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug example 'layouter'",
+            "name": "Debug example 'example1'",
             "cargo": {
                 "args": [
                     "build",
-                    "--example=layouter",
+                    "--example=example1",
                     "--package=id_tree_layout"
                 ],
                 "filter": {
