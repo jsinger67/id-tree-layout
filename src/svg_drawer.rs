@@ -1,5 +1,4 @@
-//! The SvgDrawer type provides the tranformation of the embedding information
-//! into the Svg format.
+//! The module with the crates default drawer.
 
 use crate::Drawer;
 use std::path::Path;
@@ -17,10 +16,15 @@ const Y_FACTOR: f32 = 3.5;
 const FONT_X_SIZE: f32 = 10.0;
 const FONT_Y_SIZE: f32 = 10.0;
 
+///
+/// The `SvgDrawer` type provides the transformation of the embedding information into the Svg
+/// format.
+///
 #[derive(Debug, Default)]
 pub struct SvgDrawer;
 
 impl SvgDrawer {
+    /// Method to create a fresh instance of the `SvgDrawer` type.
     pub fn new() -> Self {
         Self
     }
@@ -38,7 +42,29 @@ impl SvgDrawer {
     }
 }
 
+///
+/// The concrete implementation of the `Drawer` trait for `SvgDrawer`.
+///
 impl Drawer for SvgDrawer {
+    ///
+    /// The concrete implementation of the `Drawer::draw` trait method.
+    /// The realization is as it is - with no way to configure for instance the font used.
+    /// This decision was mode for the sake of simplicity.
+    ///
+    /// Anyway it should be easy to provide ones own Drawer implementation that fits the concrete
+    /// use case better.
+    /// When using the Layouter API you can set the Drawer instance by calling the `with_drawer`
+    /// method.
+    ///
+    /// # Panics
+    ///
+    /// The method should not panic. If you encounter a panic this should be originated from
+    /// bugs in coding. Please report such panics.
+    ///
+    /// # Complexity
+    ///
+    /// The algorithm is of complexity class O(n).
+    ///
     fn draw(&self, file_name: &Path, embedding: &[PlacedTreeItem]) -> Result {
         let file = File::create(file_name)?;
         let mut xml = XmlWriter::new(file);

@@ -1,7 +1,11 @@
+//! The module with the public API that is highly encouraged to be used.
 use crate::layouter_error;
 use crate::{Drawer, Embedder, LayouterError, SvgDrawer, Visualize};
 use id_tree::Tree;
 
+///
+/// The Result type that is uses within the public API `Layouter`.
+/// 
 pub type Result = layouter_error::Result<()>;
 
 ///
@@ -48,7 +52,7 @@ where
     }
 
     ///
-    /// Sets the name of the output file on the layouter.
+    /// Sets the path of the output file on the layouter.
     ///
     /// ```
     /// use id_tree_layout::{Layouter, Visualize};
@@ -65,10 +69,10 @@ where
     ///
     /// let tree: Tree<MyNodeData> = TreeBuilder::new().build();
     /// let layouter = Layouter::new(&tree)
-    ///     .with_file_name(Path::new("test.svg"));
+    ///     .with_file_path(Path::new("test.svg"));
     /// ```
     ///
-    pub fn with_file_name(self, path: &'c std::path::Path) -> Self {
+    pub fn with_file_path(self, path: &'c std::path::Path) -> Self {
         Self {
             tree: self.tree,
             file_name: Some(path),
@@ -105,7 +109,7 @@ where
     /// let drawer = NilDrawer;
     /// let layouter = Layouter::new(&tree)
     ///     .with_drawer(&drawer)
-    ///     .with_file_name(Path::new("test.svg"));
+    ///     .with_file_path(Path::new("test.svg"));
     /// ```
     ///
     pub fn with_drawer(self, drawer: &'b dyn Drawer) -> Self {
@@ -117,7 +121,7 @@ where
     }
 
     ///
-    /// When fully configured this function invokes the necessary embedding function
+    /// When fully configured this method invokes the necessary embedding functionality
     /// and uses the drawer which writes the result to the output file in its own format.
     ///
     /// ```
@@ -135,14 +139,14 @@ where
     ///
     /// let tree: Tree<MyNodeData> = TreeBuilder::new().build();
     /// Layouter::new(&tree)
-    ///     .with_file_name(Path::new("test.svg"))
+    ///     .with_file_path(Path::new("test.svg"))
     ///     .write().expect("Failed writing layout")
     /// ```
     ///
     pub fn write(&self) -> Result {
         if self.file_name.is_none() {
             Err(LayouterError::from_description(
-                "No output file name given - use Layouter::with_file_name.".to_string(),
+                "No output file name given - use Layouter::with_file_path.".to_string(),
             ))
         } else {
             let embedding = Embedder::embed(self.tree);

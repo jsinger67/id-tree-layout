@@ -38,6 +38,6 @@ fn main() {
         .unwrap();
 
     let layouter =
-        Layouter::new(&tree).with_file_name(std::path::Path::new("examples/example1.svg"));
+        Layouter::new(&tree).with_file_path(std::path::Path::new("examples/example1.svg"));
     layouter.write().expect("Failed writing layout")
 }

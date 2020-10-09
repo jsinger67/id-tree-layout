@@ -1,3 +1,4 @@
+//! The module with the Error type that is uses within the public API `Layouter`.
 use std::fmt;
 use std::io::Error;
 

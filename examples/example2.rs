@@ -39,7 +39,7 @@ fn main() {
     let tree: Tree<MyNodeData> = serde_json::from_str(&json).unwrap();
 
     Layouter::new(&tree)
-        .with_file_name(std::path::Path::new("examples/example2.svg"))
+        .with_file_path(std::path::Path::new("examples/example2.svg"))
         .write()
         .expect("Failed writing layout")
 }

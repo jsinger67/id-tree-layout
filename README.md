@@ -25,7 +25,7 @@ presented for a tree visualization. To resort to the implementation of the node'
 node in a graph is the same as the one used on console display.
 
 As a solution with lowest impact on users code I decided to demand the user to implement one single
-trait for his node's data type: `Visualize`. This trait only contains two functions and only one of
+trait for his node's data type: `Visualize`. This trait only contains two methods and only one of
 them is mandatory to implement.
 
 With this in mind there are two major restrictions one should know when to consider this crate to
@@ -80,7 +80,7 @@ fn main() {
     tree.insert(Node::new(MyNodeData(4)), UnderNode(&child_id)).unwrap();
 
     Layouter::new(&tree)
-        .with_file_name(std::path::Path::new("test.svg"));
+        .with_file_path(std::path::Path::new("test.svg"));
         .write().expect("Failed writing layout")
 }
 
