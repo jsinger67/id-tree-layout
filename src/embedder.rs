@@ -1,6 +1,4 @@
-//! This is the actual embedding module.
-//! It embeds the nodes of a tree into the plane.
-//! The Embedder type therefore provides a single public function `embed`.
+//! The module that holds types to embed nodes of a tree into the plane.
 
 use crate::visualize::Visualize;
 use id_tree::{NodeId, Tree};
@@ -16,7 +14,7 @@ pub type Embedding = Vec<PlacedTreeItem>;
 
 ///
 /// The PlacedTreeItem is the embedding information for one single tree node.
-/// It is used only in a collection type [Embedding].
+/// It is used only in a collection type `Embedding`.
 ///
 #[derive(Debug, Clone, Default)]
 pub struct PlacedTreeItem {
@@ -33,6 +31,10 @@ pub struct PlacedTreeItem {
 
 type EmbeddingHelperMap = BTreeMap<NodeId, PlacedTreeItem>;
 
+///
+/// The Embedder type provides a single public function `embed` to arrange nodes of a tree into the
+/// plane.
+/// 
 pub struct Embedder<T>
 where
     T: Visualize,
@@ -46,7 +48,16 @@ where
 {
     ///
     /// This function creates an embedding of the nodes of the given tree in the plane.
+    /// 
+    /// # Panics
+    /// 
+    /// The function should not panic. If you encounter a panic this should be originated from
+    /// bugs in coding. Please report such panics.
     ///
+    /// # Complexity
+    /// 
+    /// The algorithm should be of complexity O(n).
+    /// 
     pub fn embed(tree: &Tree<T>) -> Embedding {
         // Insert all tree items with their indices
         // After this step each item has following properties set:
@@ -81,7 +92,11 @@ where
                 if let Some(placed_item) = items.get(child_node_id) {
                     acc + placed_item.x_extend_children
                 } else {
-                    panic!("Child node should already exist!");
+                    // The `id_tree::Tree<T>::traverse_post_order_ids` used to visit the nodes
+                    // should always ensure that child nodes are visited before their parent nodes
+                    // are.
+                    // If you encounter this panic, please report!
+                    panic!("Child node should have already visited!");
                 }
             });
             let x_extend_children = std::cmp::max(x_extend, x_extend_of_children);
@@ -156,10 +171,13 @@ where
                             placed_parent_item.x_center
                                 - placed_parent_item.x_extend_of_children / 2
                         } else {
+                            // This really should not happen, because the parent_node_id was
+                            // previously retrieved from the tree itself. And the tree is not
+                            // touched at all.
                             panic!("Some item expected here!")
                         }
                     } else {
-                        // None means we are in layer 0
+                        // `None` means we are in layer 0
                         debug_assert_eq!(layer, 0);
                         // and we should have only one root
                         debug_assert_eq!(node_ids_in_layer.len(), 1);
@@ -181,12 +199,16 @@ where
         }
     }
 
+    /// To not being forced to convey `NodeId`'s out of the tree we simply use their hash value as
+    /// an appropriate, unique identifier. The `NodeId` is `Hash`.
     fn get_node_id_hash(node_id: &NodeId) -> u64 {
         let mut hasher = DefaultHasher::new();
         node_id.clone().hash(&mut hasher);
         hasher.finish()
     }
 
+    /// Transforming the internal `EmbeddingHelperMap` to the external representation `Embedding`.
+    /// The `items` parameter is hereby consumed.
     fn transfer_result(items: EmbeddingHelperMap) -> Embedding {
         let mut embedding_result = Embedding::with_capacity(items.len());
         for (_, e) in items {

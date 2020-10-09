@@ -4,11 +4,16 @@ version = "0.1.0"
 authors = ["Jörg Singer <singer.joerg@gmx.de>"]
 edition = "2018"
 
+[features]
+default = ["serde_support"]
+
+serde_support = ["serde", "serde_derive", "serde_json", "id_tree/serde_support"]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-id_tree = { version = "1.7.0", features = ["serde_support"]}
+id_tree = "1.7.0"
 xml_writer = "0.4.0"
-serde = "1.0.115"
-serde_derive = "1.0.115"
-serde_json = "1.0.57"
+serde = { version = "1.0.115", optional = true }
+serde_derive = { version = "1.0.115", optional = true }
+serde_json = { version = "1.0.57", optional = true }

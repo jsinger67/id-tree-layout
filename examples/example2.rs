@@ -1,3 +1,8 @@
+#![cfg(feature = "serde_support")]
+
+//! This example is only runnable if the feature serde_support is enabled.
+//! The large tree data is read from a json export, thus depending on serde.
+
 #[macro_use]
 extern crate serde_derive;
 
