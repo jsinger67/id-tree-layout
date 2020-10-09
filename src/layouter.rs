@@ -1,4 +1,4 @@
-//! The module with the public API that is highly encouraged to be used.
+//! The module with the **Public API that is highly encouraged to be used**.
 use crate::layouter_error;
 use crate::{Drawer, Embedder, LayouterError, SvgDrawer, Visualize};
 use id_tree::Tree;
@@ -82,7 +82,7 @@ where
 
     ///
     /// Sets a different drawer when you don't want to use the default svg-drawer.
-    /// If this method is not called the crates own svg-drawer is used.
+    /// If this method is not called the crate's own svg-drawer is used.
     ///
     /// ```
     /// use id_tree_layout::{Drawer, Layouter, PlacedTreeItem, Visualize};
@@ -121,8 +121,9 @@ where
     }
 
     ///
-    /// When fully configured this method invokes the necessary embedding functionality
-    /// and uses the drawer which writes the result to the output file in its own format.
+    /// When the layouter instance is fully configured this method invokes the necessary embedding
+    /// functionality and uses the drawer which writes the result to the output file in its own
+    /// output format.
     ///
     /// ```
     /// use id_tree_layout::{Layouter, Visualize};

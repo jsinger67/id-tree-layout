@@ -1,15 +1,20 @@
 [package]
 name = "id_tree_layout"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Jörg Singer <singer.joerg@gmx.de>"]
+description = "A library to visualize trees from the 'id_tree' crate."
+documentation = "https://docs.rs/id_tree_layout"
+repository = "https://github.com/jsinger67/id-tree-layout"
+readme = "README.md"
+keywords = ["id_tree", "layout", "visualization", "embedding"]
+categories = ["algorithms"]
+license = "MIT"
 edition = "2018"
 
 [features]
 default = ["serde_support"]
 
 serde_support = ["serde", "serde_derive", "serde_json", "id_tree/serde_support"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 id_tree = "1.7.0"

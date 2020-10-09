@@ -1,7 +1,7 @@
 pub use drawer::Drawer;
 pub use embedder::{Embedder, Embedding, PlacedTreeItem};
-pub use layouter::Layouter;
-pub use layouter_error::{LayouterError, Result};
+pub use layouter::{Layouter, Result};
+pub use layouter_error::LayouterError;
 pub use svg_drawer::SvgDrawer;
 pub use visualize::Visualize;
 

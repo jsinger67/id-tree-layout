@@ -1,4 +1,4 @@
-//! The module with the crates default drawer.
+//! The module with the crate's default drawer.
 
 use crate::Drawer;
 use std::path::Path;
