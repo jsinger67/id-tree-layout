@@ -1,6 +1,6 @@
 # id_tree_layout
 
-A library to visualize tree structures. It is tailored for the
+A library to visualize tree structures tailored for the
 *[id_tree](https://github.com/iwburns/id-tree)* crate.
 
 ## Overview
@@ -15,21 +15,21 @@ Here is what the result looks like:
 It turned out that the task to visualize trees is a universal one. So I decided to provide a
 separate crate for the community.
 
-While being universal it was not easy to completely abstract from the concrete tree data structure
-people might ever use. Thus I decided to use the well known `id_tree`'s tree implementation as the
-basis for this crate.
+While striving for universality it was not easy to completely abstract from the concrete tree data
+structure people might ever use. Thus I decided to use the well known `id_tree`'s tree
+implementation as the foundation for this crate.
 
 The other abstraction I wanted to face was the concrete node data type and how it should be
-presented for a tree visualization. To resort to the implementation if the `Display` trait of the
-node's data type seemed not to be specific enough. It would imply that the visualization of a
+presented for a tree visualization. To resort to the implementation of the node's data type's
+`Display` trait seemed not to be specific enough. It would imply that the visualization of a
 node in a graph is the same as the one used on console display.
 
 As a solution with lowest impact on users code I decided to demand the user to implement one single
 trait for his node's data type: `Visualize`. This trait only contains two functions and only one of
 them is mandatory to implement.
 
-So far there are two major restrictions one should know when to plan to use this crate for tree
-visualization:
+With this in mind there are two major restrictions one should know when to consider this crate to
+visualize trees:
 
 * This crate only works together with tree types provided by the `id_tree` crate.
 * The user of the crate needs to implement the `Visualize` trait for his node's data type.
@@ -44,7 +44,7 @@ drawer.
 
 ## Example Usage
 
-``` rust
+```rust
 use id_tree::InsertBehavior::{AsRoot, UnderNode};
 use id_tree::{Node, NodeId, Tree, TreeBuilder};
 use id_tree_layout::{Layouter, Visualize};
@@ -52,10 +52,10 @@ use id_tree_layout::{Layouter, Visualize};
 struct MyNodeData(i32);
 
 // You need to implement id_tree_layout::Visualize for your nodes data type.
-// This way you provide basic stringify and formatting information.
+// This way you provide basic formatting information.
 impl Visualize for MyNodeData {
     fn visualize(&self) -> std::string::String {
-        // We simply covert the i32 value to string here.
+        // We simply convert the i32 value to string here.
         self.0.to_string()
     }
     fn emphasize(&self) -> bool {

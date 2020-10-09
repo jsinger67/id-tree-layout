@@ -79,7 +79,7 @@ impl Drawer for SvgDrawer {
         xml.end_elem()?;
 
         for data in embedding {
-            let font = if data.is_empasized {
+            let font = if data.is_emphasized {
                 TERMINAL_FONT
             } else {
                 STRING_FONT

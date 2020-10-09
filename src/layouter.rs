@@ -119,7 +119,7 @@ where
     ///
     /// When fully configured this function invokes the necessary embedding function
     /// and uses the drawer which writes the result to the output file in its own format.
-    /// 
+    ///
     /// ```
     /// use id_tree_layout::{Layouter, Visualize};
     /// use id_tree::{Tree, TreeBuilder};
@@ -150,7 +150,7 @@ where
             let drawer = self.drawer.unwrap_or(&default_drawer);
             drawer
                 .draw(self.file_name.unwrap(), &embedding)
-                .map_err(LayouterError::from_ioerror)
+                .map_err(LayouterError::from_io_error)
         }
     }
 }

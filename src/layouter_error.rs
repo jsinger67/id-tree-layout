@@ -34,7 +34,7 @@ impl LayouterError {
             io_error: None,
         }
     }
-    pub fn from_ioerror(io_error: Error) -> Self {
+    pub fn from_io_error(io_error: Error) -> Self {
         Self {
             description: "IoError".to_string(),
             io_error: Some(io_error),

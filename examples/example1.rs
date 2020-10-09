@@ -5,10 +5,10 @@ use id_tree_layout::{Layouter, Visualize};
 struct MyNodeData(i32);
 
 // You need to implement id_tree_layout::Visualize for your nodes data type.
-// This way you provide basic stringify and formatting information.
+// This way you provide basic formatting information.
 impl Visualize for MyNodeData {
     fn visualize(&self) -> std::string::String {
-        // We simply covert the i32 value to string here.
+        // We simply convert the i32 value to string here.
         self.0.to_string()
     }
     fn emphasize(&self) -> bool {

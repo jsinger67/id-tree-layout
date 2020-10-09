@@ -10,14 +10,14 @@ use std::hash::{Hash, Hasher};
 
 ///
 /// The Embedding is the interface to drawers that need the embedding
-/// to tranform it to their own format.
-/// 
+/// to transform it to their own format.
+///
 pub type Embedding = Vec<PlacedTreeItem>;
 
 ///
 /// The PlacedTreeItem is the embedding information for one single tree node.
 /// It is used only in a collection type [Embedding].
-/// 
+///
 #[derive(Debug, Clone, Default)]
 pub struct PlacedTreeItem {
     pub y_order: usize,
@@ -26,7 +26,7 @@ pub struct PlacedTreeItem {
     x_extend_of_children: usize,
     pub x_extend_children: usize,
     pub name: String,
-    pub is_empasized: bool,
+    pub is_emphasized: bool,
     pub id: u64,
     pub parent: Option<u64>,
 }
@@ -45,17 +45,17 @@ where
     T: Visualize,
 {
     ///
-    /// This function creates an emebdding of the nodes of the given tree in the plane.
-    /// 
+    /// This function creates an embedding of the nodes of the given tree in the plane.
+    ///
     pub fn embed(tree: &Tree<T>) -> Embedding {
         // Insert all tree items with their indices
         // After this step each item has following properties set:
-        // 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent'
+        // 'x_extend', 'name', 'is_emphasized', 'x_extend_children', 'id', 'parent'
         let mut items = Self::create_initial_embedding_data(tree);
 
         // Set depth (y_order) on each PlacedTreeItem structure
         // After this step each item has following properties set:
-        // 'x_extend', 'name', 'is_empasized', 'x_extend_children', 'id', 'parent', 'y_order'
+        // 'x_extend', 'name', 'is_emphasized', 'x_extend_children', 'id', 'parent', 'y_order'
         Self::apply_y_order(tree, &mut items);
 
         // Finally set the property 'x_center' from leafs to root
@@ -85,7 +85,7 @@ where
                 }
             });
             let x_extend_children = std::cmp::max(x_extend, x_extend_of_children);
-            let is_empasized = node.data().emphasize();
+            let is_emphasized = node.data().emphasize();
             let id = Embedder::<T>::get_node_id_hash(node_id);
             let parent = node.parent().map(|p| Embedder::<T>::get_node_id_hash(p));
 
@@ -96,7 +96,7 @@ where
                 x_extend_of_children,
                 x_extend_children,
                 name,
-                is_empasized,
+                is_emphasized,
                 id,
                 parent,
             }
@@ -105,10 +105,7 @@ where
         let mut items = EmbeddingHelperMap::new();
 
         tree.root_node_id().map(|root_node_id| {
-            for node_id in tree
-            .traverse_post_order_ids(root_node_id)
-            .unwrap()
-            {
+            for node_id in tree.traverse_post_order_ids(root_node_id).unwrap() {
                 let new_item = create_from_node(&node_id, tree, &items);
                 let _ = items.insert(node_id, new_item);
             }
@@ -119,10 +116,7 @@ where
 
     fn apply_y_order<'a>(tree: &Tree<T>, items: &'a mut EmbeddingHelperMap) {
         tree.root_node_id().map(|root_node_id| {
-            for node_id in tree
-                .traverse_pre_order_ids(root_node_id)
-                .unwrap()
-            {
+            for node_id in tree.traverse_pre_order_ids(root_node_id).unwrap() {
                 let item = items.get_mut(&node_id).unwrap();
                 item.y_order = tree.ancestor_ids(&node_id).unwrap().count();
             }
