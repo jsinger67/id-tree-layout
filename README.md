@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/jsinger67/id-tree-layout.svg?branch=main)](https://travis-ci.org/jsinger/id-tree-layout)
 [![Docs.rs](https://docs.rs/id_tree_layout/badge.svg)](https://docs.rs/id_tree_layout)
+[![Crates.io](https://img.shields.io/crates/v/id_tree_layout.svg)](https://crates.io/crates/id_tree_layout)
 
 # id_tree_layout
 
