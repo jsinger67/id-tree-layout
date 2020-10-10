@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/jsinger67/id-tree-layout.svg?branch=main)](https://travis-ci.org/jsinger/id-tree-layout)
+[![Docs.rs](https://docs.rs/id_tree_layout/badge.svg)](https://docs.rs/id_tree_layout)
+
 # id_tree_layout
 
 A library to visualize tree structures tailored for the
