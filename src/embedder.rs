@@ -119,7 +119,6 @@ where
 
         let mut items = EmbeddingHelperMap::new();
 
-
         if let Some(root_node_id) = tree.root_node_id() {
             for node_id in tree.traverse_post_order_ids(root_node_id).unwrap() {
                 let new_item = create_from_node(&node_id, tree, &items);

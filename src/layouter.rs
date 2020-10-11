@@ -5,7 +5,7 @@ use id_tree::Tree;
 
 ///
 /// The Result type that is uses within the public API `Layouter`.
-/// 
+///
 pub type Result = layouter_error::Result<()>;
 
 ///
