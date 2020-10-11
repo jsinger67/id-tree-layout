@@ -12,7 +12,7 @@ impl Visualize for MyNodeData {
         self.0.to_string()
     }
     fn emphasize(&self) -> bool {
-        // This simply emphasizes only to leaf nodes.
+        // This simply emphasizes only the leaf nodes.
         // It only works for this example.
         self.0 > 1
     }

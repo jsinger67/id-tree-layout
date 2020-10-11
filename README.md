@@ -28,7 +28,7 @@ presented for a tree visualization. To resort to the implementation of the node'
 `Display` trait seemed not to be specific enough. It would imply that the visualization of a
 node in a graph is the same as the one used on console display.
 
-As a solution with lowest impact on users code I decided to demand the user to implement one single
+As a solution with lowest impact on users' code I decided to demand the user to implement one single
 trait for his node's data type: `Visualize`. This trait only contains two methods and only one of
 them is mandatory to implement.
 
@@ -63,7 +63,7 @@ impl Visualize for MyNodeData {
         self.0.to_string()
     }
     fn emphasize(&self) -> bool {
-        // This simply emphasizes only to leaf nodes.
+        // This simply emphasizes only the leaf nodes.
         // It only works for this example.
         self.0 > 1
     }
