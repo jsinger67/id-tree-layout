@@ -26,7 +26,7 @@ impl<'a> Visualize for MyNodeData<'a> {
         self.name.to_string()
     }
     fn emphasize(&self) -> bool {
-        // This simply emphasizes only to leaf nodes,
+        // This simply emphasizes only the leaf nodes,
         // i.e. the terminals of the parse tree.
         self.is_terminal
     }
@@ -35,9 +35,12 @@ impl<'a> Visualize for MyNodeData<'a> {
 fn main() {
     // Read the tree from the json export.
     let json = std::fs::read_to_string("examples/parse_tree.json")
-        .unwrap_or_else(|_| panic!("Can't read file 'examples/parse_tree.json'"));
+        .expect("Can't read file 'examples/parse_tree.json'");
+
+    // Deserialize the tree.
     let tree: Tree<MyNodeData> = serde_json::from_str(&json).unwrap();
 
+    // Create the svg file with the tree layout.
     Layouter::new(&tree)
         .with_file_path(std::path::Path::new("examples/example2.svg"))
         .write()
