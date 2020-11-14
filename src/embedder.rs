@@ -3,7 +3,7 @@
 use crate::visualize::Visualize;
 use id_tree::{NodeId, Tree};
 use std::collections::hash_map::DefaultHasher;
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::hash::{Hash, Hasher};
 
 ///
@@ -27,6 +27,7 @@ pub struct PlacedTreeItem {
     pub is_emphasized: bool,
     pub id: u64,
     pub parent: Option<u64>,
+    pub ord: usize,
 }
 
 type EmbeddingHelperMap = BTreeMap<NodeId, PlacedTreeItem>;
@@ -80,6 +81,7 @@ where
     fn create_initial_embedding_data(tree: &Tree<T>) -> EmbeddingHelperMap {
         fn create_from_node<T: Visualize>(
             node_id: &NodeId,
+            ord: usize,
             tree: &Tree<T>,
             items: &EmbeddingHelperMap,
         ) -> PlacedTreeItem {
@@ -114,14 +116,19 @@ where
                 is_emphasized,
                 id,
                 parent,
+                ord,
             }
         }
 
         let mut items = EmbeddingHelperMap::new();
 
         if let Some(root_node_id) = tree.root_node_id() {
-            for node_id in tree.traverse_post_order_ids(root_node_id).unwrap() {
-                let new_item = create_from_node(&node_id, tree, &items);
+            for (ord, node_id) in tree
+                .traverse_post_order_ids(root_node_id)
+                .unwrap()
+                .enumerate()
+            {
+                let new_item = create_from_node(&node_id, ord, tree, &items);
                 let _ = items.insert(node_id, new_item);
             }
         }
@@ -150,10 +157,10 @@ where
             let parents_in_layer = node_ids_in_layer
                 .iter()
                 .map(|node_id| tree.get(node_id).unwrap().parent())
-                .collect::<BTreeSet<Option<&NodeId>>>();
+                .collect::<Vec<Option<&NodeId>>>();
 
             for p in parents_in_layer {
-                let nodes_in_layer_per_parent = node_ids_in_layer
+                let mut nodes_in_layer_per_parent = node_ids_in_layer
                     .iter()
                     .filter_map(|node_id| {
                         if tree.get(node_id).unwrap().parent() == p {
@@ -163,6 +170,7 @@ where
                         }
                     })
                     .collect::<Vec<NodeId>>();
+                nodes_in_layer_per_parent.sort_by_key(|n| items.get(n).unwrap().ord);
 
                 let mut moving_x_center = {
                     if let Some(parent_node_id) = p {
