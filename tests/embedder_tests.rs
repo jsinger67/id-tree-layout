@@ -65,7 +65,7 @@ fn more_complex_tree() {
 
     {
         let e = &embedding.iter().find(|e| e.text == "0").unwrap();
-        assert_eq!("0".to_string(), e.text);
+        assert_eq!(4, e.ord);
         assert_eq!(0, e.y_order);
         assert_eq!(3, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -73,7 +73,7 @@ fn more_complex_tree() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "1").unwrap();
-        assert_eq!("1".to_string(), e.text);
+        assert_eq!(2, e.ord);
         assert_eq!(1, e.y_order);
         assert_eq!(2, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -81,7 +81,7 @@ fn more_complex_tree() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "2").unwrap();
-        assert_eq!("2".to_string(), e.text);
+        assert_eq!(3, e.ord);
         assert_eq!(1, e.y_order);
         assert_eq!(5, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -89,7 +89,7 @@ fn more_complex_tree() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "3").unwrap();
-        assert_eq!("3".to_string(), e.text);
+        assert_eq!(0, e.ord);
         assert_eq!(2, e.y_order);
         assert_eq!(1, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -97,7 +97,7 @@ fn more_complex_tree() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "4").unwrap();
-        assert_eq!("4".to_string(), e.text);
+        assert_eq!(1, e.ord);
         assert_eq!(2, e.y_order);
         assert_eq!(3, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -139,7 +139,7 @@ fn moved_nodes() {
 
     {
         let e = &embedding.iter().find(|e| e.text == "0").unwrap();
-        assert_eq!("0".to_string(), e.text);
+        assert_eq!(4, e.ord);
         assert_eq!(0, e.y_order);
         assert_eq!(3, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -147,7 +147,7 @@ fn moved_nodes() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "1").unwrap();
-        assert_eq!("1".to_string(), e.text);
+        assert_eq!(2, e.ord);
         assert_eq!(1, e.y_order);
         assert_eq!(2, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -155,7 +155,7 @@ fn moved_nodes() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "2").unwrap();
-        assert_eq!("2".to_string(), e.text);
+        assert_eq!(3, e.ord);
         assert_eq!(1, e.y_order);
         assert_eq!(5, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -163,7 +163,7 @@ fn moved_nodes() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "3").unwrap();
-        assert_eq!("3".to_string(), e.text);
+        assert_eq!(0, e.ord);
         assert_eq!(2, e.y_order);
         assert_eq!(1, e.x_center);
         assert_eq!(2, e.x_extent);
@@ -171,7 +171,7 @@ fn moved_nodes() {
     }
     {
         let e = &embedding.iter().find(|e| e.text == "4").unwrap();
-        assert_eq!("4".to_string(), e.text);
+        assert_eq!(1, e.ord);
         assert_eq!(2, e.y_order);
         assert_eq!(3, e.x_center);
         assert_eq!(2, e.x_extent);
