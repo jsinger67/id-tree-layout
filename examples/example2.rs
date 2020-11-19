@@ -14,7 +14,7 @@ use id_tree_layout::{Layouter, Visualize};
 
 #[derive(Serialize, Deserialize)]
 struct MyNodeData<'a> {
-    name: &'a str,
+    text: &'a str,
     is_terminal: bool,
 }
 
@@ -22,8 +22,8 @@ struct MyNodeData<'a> {
 // This way you provide basic formatting information.
 impl<'a> Visualize for MyNodeData<'a> {
     fn visualize(&self) -> std::string::String {
-        // We simply convert the name to an owned string here.
-        self.name.to_string()
+        // We simply convert the text to an owned string here.
+        self.text.to_string()
     }
     fn emphasize(&self) -> bool {
         // This simply emphasizes only the leaf nodes,

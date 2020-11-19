@@ -4,15 +4,18 @@
 
 # id_tree_layout
 
-A library to visualize tree structures tailored for the
+A library to visualize tree structures, tailored for the
 *[id_tree](https://github.com/iwburns/id-tree)* crate.
 
 ## Overview
 
 This crate evolved as a side-product while working on a parser generator (still work in progress).
 To check the correctness of generated parsers I needed to visualize large parse trees.
+The `id_tree`'s own `write_formatted` method is quite handy for smaller trees but quickly reaches its limits when trees starts to grow.
 
-Here is what the result looks like:
+So I wanted to have something that is more visually comprehensible.
+
+And here is what the result looks like:
 
 ![example.svg](./docs/example.svg)
 
@@ -83,9 +86,11 @@ fn main() {
     tree.insert(Node::new(MyNodeData(3)), UnderNode(&child_id)).unwrap();
     tree.insert(Node::new(MyNodeData(4)), UnderNode(&child_id)).unwrap();
 
+    // Here comes the visualization part.
     Layouter::new(&tree)
         .with_file_path(std::path::Path::new("test.svg"));
-        .write().expect("Failed writing layout")
+        .write()
+        .expect("Failed writing layout")
 }
 
 ```

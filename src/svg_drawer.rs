@@ -82,8 +82,8 @@ impl Drawer for SvgDrawer {
             .iter()
             .fold(0, |acc, e| if e.y_order > acc { e.y_order } else { acc });
         let tree_width = embedding.iter().fold(0, |acc, e| {
-            if e.x_extend_children > acc {
-                e.x_extend_children
+            if e.x_extent_children > acc {
+                e.x_extent_children
             } else {
                 acc
             }
@@ -110,18 +110,18 @@ impl Drawer for SvgDrawer {
             } else {
                 STRING_FONT
             };
-            let szx = Self::measure_string(&data.name);
+            let szx = Self::measure_string(&data.text);
             let x = Self::scale_x(data.x_center) - szx / 2.0;
             let y = Self::scale_y(data.y_order);
             xml.begin_elem("text")?;
             xml.attr("x", format!("{}", x).as_str())?;
             xml.attr("y", format!("{}", y).as_str())?;
             xml.attr("style", font)?;
-            xml.text(data.name.as_str())?;
+            xml.text(data.text.as_str())?;
             xml.end_elem()?;
 
             if let Some(parent_index) = data.parent {
-                let parent_data = embedding.iter().find(|e| e.id == parent_index).unwrap();
+                let parent_data = embedding.iter().find(|e| e.ord == parent_index).unwrap();
 
                 // Draw a line from the nodes parent down to this node
                 xml.begin_elem("line")?;
