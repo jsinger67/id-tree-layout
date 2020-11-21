@@ -9,13 +9,14 @@ A library to visualize tree structures, tailored for the
 
 ## Overview
 
-This crate evolved as a side-product while working on a parser generator (still work in progress).
+This crate evolved as a side-product while working on a parser generator.
+
 To check the correctness of generated parsers I needed to visualize large parse trees.
 The `id_tree`'s own `write_formatted` method is quite handy for smaller trees but quickly reaches its limits when trees starts to grow.
 
 So I wanted to have something that is more visually comprehensible.
 
-And here is what the result looks like:
+And here is what the result may look like:
 
 ![example.svg](./docs/example.svg)
 
@@ -31,7 +32,7 @@ presented for a tree visualization. To resort to the implementation of the node'
 `Display` trait seemed not to be specific enough. It would imply that the visualization of a
 node in a graph is the same as the one used on console display.
 
-As a solution with lowest impact on users' code I decided to demand the user to implement one single
+As a solution with lowest impact on users' code I decided to demand from the user to implement one single
 trait for his node's data type: `Visualize`. This trait only contains two methods and only one of
 them is mandatory to implement.
 
@@ -46,8 +47,9 @@ presented to the user, i.e. in which format the embedding is converted in the en
 simplicity the `id_tree_layout` crate offers a simple default solution for this task, the SvgDrawer
 type. It provides elementary representation of the embedding in SVG format. But if the user wants
 to use its own realization, for instance to print the embedding onto a bitmap, he can integrate
-into the graph generation easily. All he needs to do is to implement the `Drawer` trait for his
-drawer.
+into the graph generation easily. For this he needs to implement his own drawer algorithm and
+implement the `Drawer` trait for it. Then he can use the `Layouter`'s `with_drawer` method to supply it
+to the drawing procedure.
 
 ## Example Usage
 
