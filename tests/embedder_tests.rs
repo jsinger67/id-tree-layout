@@ -121,7 +121,8 @@ fn moved_nodes() {
     let n4_id = tree
         .insert(Node::new(MyNodeData(4)), UnderNode(&root_id))
         .unwrap();
-    let n3_id = tree.insert(Node::new(MyNodeData(3)), UnderNode(&root_id))
+    let n3_id = tree
+        .insert(Node::new(MyNodeData(3)), UnderNode(&root_id))
         .unwrap();
 
     //      0

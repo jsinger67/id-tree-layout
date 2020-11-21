@@ -13,7 +13,7 @@ pub type Embedding = Vec<PlacedTreeItem>;
 ///
 /// The PlacedTreeItem is the embedding information for one single tree node.
 /// It is used only in a collection type `Embedding`.
-/// Due to private member(s) this struct can't be created outside.
+/// Due to private members this struct can't be created outside this crate.
 ///
 #[derive(Debug, Clone, Default)]
 pub struct PlacedTreeItem {
@@ -35,9 +35,40 @@ pub struct PlacedTreeItem {
     pub parent: Option<usize>,
     /// A unique number reflecting the topological post-ordering of the nodes in the tree
     pub ord: usize,
+    /// Internal node id - The Option type used to circumvent missing Default implementation of `NodeId`s
+    /// There should normally be no None values in there.
+    node_id: Option<NodeId>,
 }
 
-type EmbeddingHelperMap = HashMap<NodeId, PlacedTreeItem>;
+struct EmbeddingHelperMap(HashMap<usize, PlacedTreeItem>, HashMap<NodeId, usize>);
+
+impl EmbeddingHelperMap {
+    fn new() -> Self {
+        Self(HashMap::new(), HashMap::new())
+    }
+
+    fn get_by_ord(&self, ord: usize) -> Option<&PlacedTreeItem> {
+        self.0.get(&ord)
+    }
+
+    fn get_mut_by_ord(&mut self, ord: usize) -> Option<&mut PlacedTreeItem> {
+        self.0.get_mut(&ord)
+    }
+
+    fn get_by_node_id(&self, node_id: &NodeId) -> Option<&PlacedTreeItem> {
+        self.1.get(node_id).map(|n| self.0.get(n)).flatten()
+    }
+
+    fn get_mut_by_node_id(&mut self, node_id: &NodeId) -> Option<&mut PlacedTreeItem> {
+        let ord = self.1.get(node_id).cloned();
+        ord.map(move |n| self.0.get_mut(&n)).flatten()
+    }
+
+    fn insert(&mut self, ord: usize, item: PlacedTreeItem) {
+        item.node_id.as_ref().map(|n| self.1.insert(n.clone(), ord));
+        self.0.insert(ord, item);
+    }
+}
 
 ///
 /// The Embedder type provides a single public method `embed` to arrange nodes of a tree into the
@@ -98,7 +129,7 @@ where
             let x_center = 0;
             let x_extent = text.len() + 1;
             let x_extent_of_children = node.children().iter().fold(0, |acc, child_node_id| {
-                if let Some(placed_item) = items.get(child_node_id) {
+                if let Some(placed_item) = items.get_by_node_id(child_node_id) {
                     acc + placed_item.x_extent_children
                 } else {
                     // The `id_tree::Tree<T>::traverse_post_order_ids` used to visit the nodes
@@ -111,6 +142,7 @@ where
             let x_extent_children = std::cmp::max(x_extent, x_extent_of_children);
             let is_emphasized = node.data().emphasize();
             let parent = None;
+            let node_id = Some(node_id.clone());
 
             PlacedTreeItem {
                 y_order,
@@ -122,6 +154,7 @@ where
                 is_emphasized,
                 parent,
                 ord,
+                node_id,
             }
         }
 
@@ -134,7 +167,7 @@ where
                 .enumerate()
             {
                 let new_item = create_from_node(&node_id, ord, tree, &items);
-                let _ = items.insert(node_id, new_item);
+                let _ = items.insert(ord, new_item);
             }
         }
 
@@ -145,8 +178,12 @@ where
         if let Some(root_node_id) = tree.root_node_id() {
             for node_id in tree.traverse_pre_order_ids(root_node_id).unwrap() {
                 let level = tree.ancestor_ids(&node_id).unwrap().count();
-                let parent = tree.ancestor_ids(&node_id).unwrap().next().map(|id| items.get(id).unwrap().ord );
-                let item = items.get_mut(&node_id).unwrap();
+                let parent = tree
+                    .ancestor_ids(&node_id)
+                    .unwrap()
+                    .next()
+                    .map(|id| items.get_by_node_id(id).unwrap().ord);
+                let item = items.get_mut_by_node_id(&node_id).unwrap();
                 item.y_order = level;
                 item.parent = parent;
             }
@@ -154,35 +191,35 @@ where
     }
 
     fn apply_x_center(tree: &Tree<T>, items: &mut EmbeddingHelperMap) {
-        fn x_center_layer<T>(layer: usize, tree: &Tree<T>, items: &mut EmbeddingHelperMap) {
-            let node_ids_in_layer = items.iter().fold(Vec::new(), |mut acc, (node_id, item)| {
+        fn x_center_layer(layer: usize, items: &mut EmbeddingHelperMap) {
+            let node_ids_in_layer = items.0.iter().fold(Vec::new(), |mut acc, (ord, item)| {
                 if item.y_order == layer {
-                    acc.push(node_id.clone())
+                    acc.push(*ord)
                 }
                 acc
             });
 
             let parents_in_layer = node_ids_in_layer
                 .iter()
-                .map(|node_id| tree.get(node_id).unwrap().parent())
-                .collect::<Vec<Option<&NodeId>>>();
+                .map(|ord| items.get_by_ord(*ord).unwrap().parent)
+                .collect::<Vec<Option<usize>>>();
 
             for p in parents_in_layer {
                 let mut nodes_in_layer_per_parent = node_ids_in_layer
                     .iter()
-                    .filter_map(|node_id| {
-                        if tree.get(node_id).unwrap().parent() == p {
-                            Some(node_id.clone())
+                    .filter_map(|ord| {
+                        if items.get_by_ord(*ord).unwrap().parent == p {
+                            Some(*ord)
                         } else {
                             None
                         }
                     })
-                    .collect::<Vec<NodeId>>();
-                nodes_in_layer_per_parent.sort_by_key(|n| items.get(n).unwrap().ord);
+                    .collect::<Vec<usize>>();
+                nodes_in_layer_per_parent.sort_by_key(|n| items.get_by_ord(*n).unwrap().ord);
 
                 let mut moving_x_center = {
-                    if let Some(parent_node_id) = p {
-                        if let Some(placed_parent_item) = items.get(&parent_node_id) {
+                    if let Some(parent_ord) = p {
+                        if let Some(placed_parent_item) = items.get_by_ord(parent_ord) {
                             // We start half way left from the parents x center
                             placed_parent_item.x_center
                                 - placed_parent_item.x_extent_of_children / 2
@@ -201,8 +238,8 @@ where
                         0
                     }
                 };
-                for node_id in nodes_in_layer_per_parent {
-                    if let Some(placed_item) = items.get_mut(&node_id) {
+                for ord in nodes_in_layer_per_parent {
+                    if let Some(placed_item) = items.get_mut_by_ord(ord) {
                         placed_item.x_center = moving_x_center + placed_item.x_extent_children / 2;
                         moving_x_center += placed_item.x_extent_children;
                     }
@@ -211,15 +248,15 @@ where
         }
 
         for l in 0..tree.height() + 1 {
-            x_center_layer(l, tree, items);
+            x_center_layer(l, items);
         }
     }
 
     /// Transforming the internal `EmbeddingHelperMap` to the external representation `Embedding`.
     /// The `items` parameter is hereby consumed.
     fn transfer_result(items: EmbeddingHelperMap) -> Embedding {
-        let mut embedding_result = Embedding::with_capacity(items.len());
-        for (_, e) in items {
+        let mut embedding_result = Embedding::with_capacity(items.0.len());
+        for (_, e) in items.0 {
             embedding_result.push(e);
         }
         embedding_result
