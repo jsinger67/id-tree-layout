@@ -13,7 +13,7 @@ pub type Embedding = Vec<PlacedTreeItem>;
 ///
 /// The PlacedTreeItem is the embedding information for one single tree node.
 /// It is used only in a collection type `Embedding`.
-/// Due to private members this struct can't be created outside this crate.
+/// External API: keep stable.
 ///
 #[derive(Debug, Clone, Default)]
 pub struct PlacedTreeItem {
@@ -23,8 +23,6 @@ pub struct PlacedTreeItem {
     pub x_center: usize,
     /// The x-extent of the nodes text representation in logical coordinate units
     pub x_extent: usize,
-    /// Internal value used to sum up the x-extent of all children of the node
-    x_extent_of_children: usize,
     /// The maximum extent over the nodes text representation and the sum of all children's x-extent
     pub x_extent_children: usize,
     /// The text representation of the nodes data - created by the `Visualize` trait's implementation
@@ -35,36 +33,82 @@ pub struct PlacedTreeItem {
     pub parent: Option<usize>,
     /// A unique number reflecting the topological post-ordering of the nodes in the tree
     pub ord: usize,
+}
+
+///
+/// Conversion form internal to external (i.e. public) representation of the embedding structure.
+///
+impl From<ItemEmbeddingData> for PlacedTreeItem {
+    fn from(e: ItemEmbeddingData) -> Self {
+        Self {
+            y_order: e.y_order,
+            x_center: e.x_center,
+            x_extent: e.x_extent,
+            x_extent_children: e.x_extent_children,
+            text: e.text,
+            is_emphasized: e.is_emphasized,
+            parent: e.parent,
+            ord: e.ord,
+        }
+    }
+}
+
+///
+/// The ItemEmbeddingData is the internal embedding information for one single tree node.
+///
+#[derive(Debug, Clone, Default)]
+struct ItemEmbeddingData {
+    /// The nodes level, root has level 0. Can be used to calculate an y coordinate for the node
+    y_order: usize,
+    /// The logical x coordinate of the node's center
+    x_center: usize,
+    /// The x-extent of the nodes text representation in logical coordinate units
+    x_extent: usize,
+    /// Internal value used to sum up the x-extent of all children of the node
+    x_extent_of_children: usize,
+    /// The maximum extent over the nodes text representation and the sum of all children's x-extent
+    x_extent_children: usize,
+    /// The text representation of the nodes data - created by the `Visualize` trait's implementation
+    text: String,
+    /// The *emphasize* property obtained from the `Visualize` trait
+    is_emphasized: bool,
+    /// The parent's `ord`, if there is one
+    parent: Option<usize>,
+    /// A unique number reflecting the topological post-ordering of the nodes in the tree
+    ord: usize,
     /// Internal node id - The Option type used to circumvent missing Default implementation of `NodeId`s
     /// There should normally be no None values in there.
     node_id: Option<NodeId>,
 }
 
-struct EmbeddingHelperMap(HashMap<usize, PlacedTreeItem>, HashMap<NodeId, usize>);
+///
+/// Internal helper data
+///
+struct EmbeddingHelperData(HashMap<usize, ItemEmbeddingData>, HashMap<NodeId, usize>);
 
-impl EmbeddingHelperMap {
+impl EmbeddingHelperData {
     fn new() -> Self {
         Self(HashMap::new(), HashMap::new())
     }
 
-    fn get_by_ord(&self, ord: usize) -> Option<&PlacedTreeItem> {
+    fn get_by_ord(&self, ord: usize) -> Option<&ItemEmbeddingData> {
         self.0.get(&ord)
     }
 
-    fn get_mut_by_ord(&mut self, ord: usize) -> Option<&mut PlacedTreeItem> {
+    fn get_mut_by_ord(&mut self, ord: usize) -> Option<&mut ItemEmbeddingData> {
         self.0.get_mut(&ord)
     }
 
-    fn get_by_node_id(&self, node_id: &NodeId) -> Option<&PlacedTreeItem> {
+    fn get_by_node_id(&self, node_id: &NodeId) -> Option<&ItemEmbeddingData> {
         self.1.get(node_id).map(|n| self.0.get(n)).flatten()
     }
 
-    fn get_mut_by_node_id(&mut self, node_id: &NodeId) -> Option<&mut PlacedTreeItem> {
+    fn get_mut_by_node_id(&mut self, node_id: &NodeId) -> Option<&mut ItemEmbeddingData> {
         let ord = self.1.get(node_id).cloned();
         ord.map(move |n| self.0.get_mut(&n)).flatten()
     }
 
-    fn insert(&mut self, ord: usize, item: PlacedTreeItem) {
+    fn insert(&mut self, ord: usize, item: ItemEmbeddingData) {
         item.node_id.as_ref().map(|n| self.1.insert(n.clone(), ord));
         self.0.insert(ord, item);
     }
@@ -102,8 +146,9 @@ where
         // After this step each item has following properties set:
         // 'x_extent', 'text', 'is_emphasized', 'x_extent_children', 'ord'
         let mut items = Self::create_initial_embedding_data(tree);
+        debug_assert_eq!(items.0.len(), items.1.len());
 
-        // Set depth (y_order) on each PlacedTreeItem structure
+        // Set depth (y_order) on each ItemEmbeddingData structure
         // After this step each item has following properties set:
         // 'x_extent', 'text', 'is_emphasized', 'x_extent_children', 'ord', 'parent', 'y_order'
         Self::apply_y_order(tree, &mut items);
@@ -116,13 +161,13 @@ where
         Self::transfer_result(items)
     }
 
-    fn create_initial_embedding_data(tree: &Tree<T>) -> EmbeddingHelperMap {
+    fn create_initial_embedding_data(tree: &Tree<T>) -> EmbeddingHelperData {
         fn create_from_node<T: Visualize>(
             node_id: &NodeId,
             ord: usize,
             tree: &Tree<T>,
-            items: &EmbeddingHelperMap,
-        ) -> PlacedTreeItem {
+            items: &EmbeddingHelperData,
+        ) -> ItemEmbeddingData {
             let node = tree.get(node_id).unwrap();
             let text = node.data().visualize();
             let y_order = 0;
@@ -144,7 +189,7 @@ where
             let parent = None;
             let node_id = Some(node_id.clone());
 
-            PlacedTreeItem {
+            ItemEmbeddingData {
                 y_order,
                 x_center,
                 x_extent,
@@ -158,7 +203,7 @@ where
             }
         }
 
-        let mut items = EmbeddingHelperMap::new();
+        let mut items = EmbeddingHelperData::new();
 
         if let Some(root_node_id) = tree.root_node_id() {
             for (ord, node_id) in tree
@@ -174,7 +219,7 @@ where
         items
     }
 
-    fn apply_y_order<'a>(tree: &Tree<T>, items: &'a mut EmbeddingHelperMap) {
+    fn apply_y_order<'a>(tree: &Tree<T>, items: &'a mut EmbeddingHelperData) {
         if let Some(root_node_id) = tree.root_node_id() {
             for node_id in tree.traverse_pre_order_ids(root_node_id).unwrap() {
                 let level = tree.ancestor_ids(&node_id).unwrap().count();
@@ -190,8 +235,8 @@ where
         };
     }
 
-    fn apply_x_center(tree: &Tree<T>, items: &mut EmbeddingHelperMap) {
-        fn x_center_layer(layer: usize, items: &mut EmbeddingHelperMap) {
+    fn apply_x_center(tree: &Tree<T>, items: &mut EmbeddingHelperData) {
+        fn x_center_layer(layer: usize, items: &mut EmbeddingHelperData) {
             let node_ids_in_layer = items.0.iter().fold(Vec::new(), |mut acc, (ord, item)| {
                 if item.y_order == layer {
                     acc.push(*ord)
@@ -254,11 +299,14 @@ where
 
     /// Transforming the internal `EmbeddingHelperMap` to the external representation `Embedding`.
     /// The `items` parameter is hereby consumed.
-    fn transfer_result(items: EmbeddingHelperMap) -> Embedding {
-        let mut embedding_result = Embedding::with_capacity(items.0.len());
-        for (_, e) in items.0 {
-            embedding_result.push(e);
-        }
-        embedding_result
+    fn transfer_result(items: EmbeddingHelperData) -> Embedding {
+        let len = items.0.len();
+        items
+            .0
+            .into_iter()
+            .fold(Embedding::with_capacity(len), |mut acc, e| {
+                acc.push(e.1.into());
+                acc
+            })
     }
 }
