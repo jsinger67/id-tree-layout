@@ -1,6 +1,6 @@
 [package]
 name = "id_tree_layout"
-version = "2.0.0"
+version = "2.0.1"
 authors = ["Jörg Singer <singer.joerg@gmx.de>"]
 description = "A library to visualize trees from the 'id_tree' crate."
 documentation = "https://docs.rs/id_tree_layout"
