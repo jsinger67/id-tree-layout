@@ -12,7 +12,7 @@ A library to visualize tree structures, tailored for the
 This crate evolved as a side-product while working on a parser generator.
 
 To check the correctness of generated parsers I needed to visualize large parse trees.
-The `id_tree`'s own `write_formatted` method is quite handy for smaller trees but quickly reaches its limits when trees starts to grow.
+The `id_tree`'s own `write_formatted` method is quite handy for smaller trees but quickly reaches its limits when trees start to grow.
 
 So I wanted to have something that is more visually comprehensible.
 
