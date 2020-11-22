@@ -2,7 +2,7 @@
 
 use crate::visualize::Visualize;
 use id_tree::{NodeId, Tree};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 ///
 /// The Embedding is the interface to drawers that need the embedding
@@ -84,11 +84,11 @@ struct ItemEmbeddingData {
 ///
 /// Internal helper data
 ///
-struct EmbeddingHelperData(HashMap<usize, ItemEmbeddingData>, HashMap<NodeId, usize>);
+struct EmbeddingHelperData(BTreeMap<usize, ItemEmbeddingData>, HashMap<NodeId, usize>);
 
 impl EmbeddingHelperData {
     fn new() -> Self {
-        Self(HashMap::new(), HashMap::new())
+        Self(BTreeMap::new(), HashMap::new())
     }
 
     fn get_by_ord(&self, ord: usize) -> Option<&ItemEmbeddingData> {
@@ -250,7 +250,7 @@ where
                 .collect::<Vec<Option<usize>>>();
 
             for p in parents_in_layer {
-                let mut nodes_in_layer_per_parent = node_ids_in_layer
+                let nodes_in_layer_per_parent = node_ids_in_layer
                     .iter()
                     .filter_map(|ord| {
                         if items.get_by_ord(*ord).unwrap().parent == p {
@@ -260,7 +260,6 @@ where
                         }
                     })
                     .collect::<Vec<usize>>();
-                nodes_in_layer_per_parent.sort_by_key(|n| items.get_by_ord(*n).unwrap().ord);
 
                 let mut moving_x_center = {
                     if let Some(parent_ord) = p {
