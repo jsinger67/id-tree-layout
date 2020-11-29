@@ -22,9 +22,9 @@
   <line x1="70" y1="210" x2="90" y2="225" stroke="black"></line>
   <text x="85" y="270" style="font-family: 'Courier'; font-weight: bold; font-style: normal">=</text>
   <line x1="90" y1="245" x2="90" y2="260" stroke="black"></line>
-  <text x="270" y="200" style="font-family: 'Courier'; font-style: normal">locigal_or</text>
+  <text x="270" y="200" style="font-family: 'Courier'; font-style: normal">logical_or</text>
   <line x1="250" y1="175" x2="320" y2="190" stroke="black"></line>
-  <text x="265" y="235" style="font-family: 'Courier'; font-style: normal">locigal_and</text>
+  <text x="265" y="235" style="font-family: 'Courier'; font-style: normal">logical_and</text>
   <line x1="320" y1="210" x2="320" y2="225" stroke="black"></line>
   <text x="270" y="270" style="font-family: 'Courier'; font-style: normal">bitwise_or</text>
   <line x1="320" y1="245" x2="320" y2="260" stroke="black"></line>
