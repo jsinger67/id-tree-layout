@@ -139,7 +139,7 @@ where
     ///
     /// # Complexity
     ///
-    /// The algorithm is of complexity class O(n).
+    /// The algorithm is of time complexity class O(n).
     ///
     pub fn embed(tree: &Tree<T>) -> Embedding {
         // Insert all tree items with their indices
@@ -219,7 +219,7 @@ where
         items
     }
 
-    fn apply_y_order<'a>(tree: &Tree<T>, items: &'a mut EmbeddingHelperData) {
+    fn apply_y_order(tree: &Tree<T>, items: &mut EmbeddingHelperData) {
         if let Some(root_node_id) = tree.root_node_id() {
             for node_id in tree.traverse_pre_order_ids(root_node_id).unwrap() {
                 let level = tree.ancestor_ids(&node_id).unwrap().count();

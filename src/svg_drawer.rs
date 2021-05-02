@@ -63,7 +63,7 @@ impl Drawer for SvgDrawer {
     ///
     /// # Complexity
     ///
-    /// The algorithm is of complexity class O(n).
+    /// The algorithm is of time complexity class O(n).
     ///
     fn draw(&self, file_name: &Path, embedding: &[PlacedTreeItem]) -> Result {
         let file = File::create(file_name)?;
@@ -76,7 +76,8 @@ impl Drawer for SvgDrawer {
         xml.attr("lang", "en")?;
 
         const STRING_FONT: &str = "font-family: 'Courier'; font-style: normal";
-        const TERMINAL_FONT: &str = "font-family: 'Courier'; font-weight: bold; font-style: normal";
+        const EMPHASIZE_FONT: &str =
+            "font-family: 'Courier'; font-weight: bold; font-style: normal";
 
         let tree_depth = embedding
             .iter()
@@ -106,7 +107,7 @@ impl Drawer for SvgDrawer {
 
         for data in embedding {
             let font = if data.is_emphasized {
-                TERMINAL_FONT
+                EMPHASIZE_FONT
             } else {
                 STRING_FONT
             };
