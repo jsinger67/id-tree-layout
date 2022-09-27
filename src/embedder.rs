@@ -100,12 +100,12 @@ impl EmbeddingHelperData {
     }
 
     fn get_by_node_id(&self, node_id: &NodeId) -> Option<&ItemEmbeddingData> {
-        self.1.get(node_id).map(|n| self.0.get(n)).flatten()
+        self.1.get(node_id).and_then(|n| self.0.get(n))
     }
 
     fn get_mut_by_node_id(&mut self, node_id: &NodeId) -> Option<&mut ItemEmbeddingData> {
         let ord = self.1.get(node_id).cloned();
-        ord.map(move |n| self.0.get_mut(&n)).flatten()
+        ord.and_then(move |n| self.0.get_mut(&n))
     }
 
     fn insert(&mut self, ord: usize, item: ItemEmbeddingData) {
@@ -212,7 +212,7 @@ where
                 .enumerate()
             {
                 let new_item = create_from_node(&node_id, ord, tree, &items);
-                let _ = items.insert(ord, new_item);
+                items.insert(ord, new_item);
             }
         }
 
